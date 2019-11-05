@@ -1,5 +1,5 @@
 node {
-    tools {"org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform-0.11.10"}
+    tools {"org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform-0.12.10"}
 
     environment {
         TF_HOME = tool('terraform-0.12.10')
