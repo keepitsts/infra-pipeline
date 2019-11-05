@@ -46,7 +46,7 @@ node {
                     dir('./terraform/prod'){
                         sh "echo 'Applying Terraform'"
                         IP = sh (
-                            script: 'terraform apply --auto-approve'
+                            script: 'terraform apply --auto-approve',
                             returnStdout: true
                         ).trim() 
                         echo "Server IP is $IP"
