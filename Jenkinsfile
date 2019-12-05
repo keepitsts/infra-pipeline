@@ -39,7 +39,7 @@ pipeline {
         stage('terraform init') {
             steps {
                 sh "echo 'Initializing Terraform'"
-                sh "./terraform init -input=false"
+                sh "./terraform init -input=false -backend-config='access_key=$AWS_ACCESS_KEY_ID' -backend-config='secret_key=$AWS_SECRET_ACCESS_KEY'"
             }
         }
 
