@@ -16,7 +16,18 @@ pipeline {
                 checkout scm
             }
         }
-
+        stage('aws credentials') {
+            steps {
+                sh'''
+                temp_role=$(aws sts assume-role \
+                    --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
+                    --role-session-name "session")
+                export AWS_ACCESS_KEY_ID=$(echo $temp_role | jq -r .Credentials.AccessKeyId)
+                export AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq -r .Credentials.SecretAccessKey)
+                export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
+                '''
+            }
+        }
         stage('terraform install') {
             steps {
                 sh "wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip"
@@ -34,7 +45,7 @@ pipeline {
         stage('terraform plan'){
             steps {
                 sh "echo 'Planning Terraform Build'"
-                sh "./terraform plan "//-var 'access_key=${env.ACCESS_KEY}' -var 'secret_key=${env.SECRET_KEY}'"
+                sh "./terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY'"
             }
         }
 
@@ -50,14 +61,14 @@ pipeline {
                             currentBuild.result = 'UNSTABLE'
                     }
                     if(apply){
-                        withAWS(role: 'jenkins_role', roleAccount: '552752748819') {
+                        // withAWS(role: 'jenkins_role', roleAccount: '552752748819') {
                             sh "echo 'Applying Terraform'"
                             IP = sh (
-                                script: './terraform apply --auto-approve',
+                                script: './terraform apply --auto-approve' -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY',
                                 returnStdout: true
                             ).trim() 
                             echo "Server IP is $IP"
-                        }
+                        // }
                     }
                 }
             }

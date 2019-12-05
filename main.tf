@@ -3,7 +3,9 @@ terraform {
     bucket  = "sts-terraform-remote-state"
     key     = "poc-pipeline"
     region  = "us-east-1"
-    profile = "sts-dm"
+    # profile = "sts-dm"
+    access_key = var.access_key
+    secret_key = var.secret_key
   }
   required_version = "0.12.10"
 }
