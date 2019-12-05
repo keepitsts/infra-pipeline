@@ -64,7 +64,7 @@ pipeline {
                         // withAWS(role: 'jenkins_role', roleAccount: '552752748819') {
                             sh "echo 'Applying Terraform'"
                             IP = sh (
-                                script: './terraform apply --auto-approve' -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY',
+                                script: "./terraform apply --auto-approve -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY'",
                                 returnStdout: true
                             ).trim() 
                             echo "Server IP is $IP"
