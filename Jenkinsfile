@@ -53,7 +53,7 @@ pipeline {
                 export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
                 '''
                 sh "echo 'Planning Terraform Build'"
-                sh "./terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY'"
+                sh "./terraform plan -var 'access_key='$AWS_ACCESS_KEY_ID'' -var 'secret_key='$AWS_SECRET_ACCESS_KEY''"
             }
         }
 
