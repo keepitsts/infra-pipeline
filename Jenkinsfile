@@ -1,15 +1,15 @@
-def AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
-def AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+
 pipeline {
     agent any 
     // tools {"org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform-0.12.17"}
 
-    // environment {
-    //     // TF_HOME = tool('terraform-0.12.17')
-    //     // TF_IN_AUTOMATION = "true"
-    //     // PATH = "$TF_HOME:$PATH"
-
-    // }
+    environment {
+        // TF_HOME = tool('terraform-0.12.17')
+        // TF_IN_AUTOMATION = "true"
+        // PATH = "$TF_HOME:$PATH"
+        AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+    }
 
     stages {
         stage('checkout') {
@@ -54,7 +54,7 @@ pipeline {
                 // export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
                 // '''
                 sh "echo 'Planning Terraform Build'"
-                sh "./terraform plan -var 'access_key=${AWS_ACCESS_KEY_ID}' -var 'secret_key=${AWS_SECRET_ACCESS_KEY}'"
+                sh "./terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY'"
             }
         }
 
@@ -81,7 +81,7 @@ pipeline {
                             // export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
                             // '''
                             IP = sh (
-                                script: "./terraform apply --auto-approve -var 'access_key=${AWS_ACCESS_KEY_ID}' -var 'secret_key=${AWS_SECRET_ACCESS_KEY}'",
+                                script: "./terraform apply --auto-approve -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY'",
                                 returnStdout: true
                             ).trim() 
                             echo "Server IP is $IP"
