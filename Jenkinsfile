@@ -44,14 +44,14 @@ pipeline {
 
         stage('terraform plan'){
             steps {
-                sh'''
-                temp_role=$(aws sts assume-role \
-                    --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
-                    --role-session-name "session")
-                export AWS_ACCESS_KEY_ID=$(echo $temp_role | jq -r .Credentials.AccessKeyId)
-                export AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq -r .Credentials.SecretAccessKey)
-                export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
-                '''
+                // sh'''
+                // temp_role=$(aws sts assume-role \
+                //     --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
+                //     --role-session-name "session")
+                // export AWS_ACCESS_KEY_ID=$(echo $temp_role | jq -r .Credentials.AccessKeyId)
+                // export AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq -r .Credentials.SecretAccessKey)
+                // export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
+                // '''
                 sh "echo 'Planning Terraform Build'"
                 sh "./terraform plan -var 'access_key='$AWS_ACCESS_KEY_ID'' -var 'secret_key='$AWS_SECRET_ACCESS_KEY''"
             }
@@ -71,14 +71,14 @@ pipeline {
                     if(apply){
                         // withAWS(role: 'jenkins_role', roleAccount: '552752748819') {
                             sh "echo 'Applying Terraform'"
-                            sh'''
-                            temp_role=$(aws sts assume-role \
-                                --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
-                                --role-session-name "session")
-                            export AWS_ACCESS_KEY_ID=$(echo $temp_role | jq -r .Credentials.AccessKeyId)
-                            export AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq -r .Credentials.SecretAccessKey)
-                            export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
-                            '''
+                            // sh'''
+                            // temp_role=$(aws sts assume-role \
+                            //     --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
+                            //     --role-session-name "session")
+                            // export AWS_ACCESS_KEY_ID=$(echo $temp_role | jq -r .Credentials.AccessKeyId)
+                            // export AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq -r .Credentials.SecretAccessKey)
+                            // export AWS_SESSION_TOKEN=$(echo $temp_role | jq -r .Credentials.SessionToken)
+                            // '''
                             IP = sh (
                                 script: "./terraform apply --auto-approve -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY'",
                                 returnStdout: true
@@ -90,4 +90,18 @@ pipeline {
             }
         }
     }
+}
+def AWS_ACCESS_KEY_ID() {
+    temp_role=$(aws sts assume-role \
+        --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
+        --role-session-name "session")
+    AWS_ACCESS_KEY_ID=$(echo $temp_role | jq -r .Credentials.AccessKeyId)
+    AWS_ACCESS_KEY_ID
+}
+def AWS_SECRET_ACCESS_KEY() {
+    temp_role=$(aws sts assume-role \
+        --role-arn "arn:aws:iam::552752748819:role/jenkins_role" \
+        --role-session-name "session")
+    AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq -r .Credentials.SecretAccessKey)
+    AWS_SECRET_ACCESS_KEY
 }
