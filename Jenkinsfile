@@ -17,7 +17,6 @@ pipeline {
             }
         }
 
-
         stage('terraform install') {
             steps {
                 sh "wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip"
@@ -51,14 +50,14 @@ pipeline {
                             currentBuild.result = 'UNSTABLE'
                     }
                     if(apply){
-                        steps {
+                        // steps {
                             sh "echo 'Applying Terraform'"
                             IP = sh (
                                 script: './terraform apply --auto-approve',
                                 returnStdout: true
                             ).trim() 
                             echo "Server IP is $IP"
-                        }
+                        // }
                     }
                 }
             }
