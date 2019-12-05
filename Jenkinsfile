@@ -9,7 +9,7 @@ node {
         SECRET_KEY = credentials('jenkins-aws-secret-access-key')
     }
 
-    echo "workspace directory is ${workspace}"
+    // echo "workspace directory is ${workspace}"
 
     stage('checkout') {
         checkout scm
