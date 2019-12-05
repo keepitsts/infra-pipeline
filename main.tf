@@ -5,6 +5,7 @@ terraform {
     region  = "us-east-1"
     profile = "sts-dm"
   }
+  required_version = "0.12.1"
 }
 module "security_group" {
   source = "./modules/security_group"
