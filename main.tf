@@ -9,6 +9,13 @@ terraform {
   }
   required_version = "0.12.10"
 }
+variable "access_key" {
+  
+}
+variable "secret_key" {
+  
+}
+
 module "security_group" {
   source = "./modules/security_group"
   access_key = var.access_key
