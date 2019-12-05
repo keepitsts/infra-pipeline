@@ -9,7 +9,6 @@ node {
         SECRET_KEY = credentials('jenkins-aws-secret-access-key')
     }
 
-    // echo "workspace directory is ${workspace}"
 
     stage('checkout') {
         checkout scm
@@ -17,24 +16,23 @@ node {
 
 
     stage('terraform install') {
-        dir('.'){
+        steps {
             sh "wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip"
             sh "unzip -o terraform_0.12.10_linux_amd64.zip"
-            // sh "sudo mv terraform /usr/local/bin/"
 
         }
     }
     stage('terraform init') {
-        dir('.'){
+        steps {
             sh "echo 'Initializing Terraform'"
             sh "./terraform init -input=false"
         }
     }
 
     stage('terraform plan'){
-        dir('.'){
+        steps {
             sh "echo 'Planning Terraform Build'"
-            sh "./terraform plan -var 'access_key=${env.ACCESS_KEY}' -var 'secret_key=${env.SECRET_KEY}'"
+            sh "./terraform plan "//-var 'access_key=${env.ACCESS_KEY}' -var 'secret_key=${env.SECRET_KEY}'"
         }
     }
 
@@ -50,7 +48,7 @@ node {
                         currentBuild.result = 'UNSTABLE'
                 }
                 if(apply){
-                    dir('.'){
+                    steps {
                         sh "echo 'Applying Terraform'"
                         IP = sh (
                             script: './terraform apply --auto-approve',
