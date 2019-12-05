@@ -17,12 +17,12 @@ node {
 
 
 
-    stage('terraform init') {
-        dir('.'){
-            sh "echo 'Initializing Terraform'"
-            sh "terraform init -input=false"
-        }
-    }
+    // stage('terraform init') {
+    //     dir('.'){
+    //         sh "echo 'Initializing Terraform'"
+    //         sh "terraform init -input=false"
+    //     }
+    // }
 
     stage('terraform plan'){
         dir('.'){
