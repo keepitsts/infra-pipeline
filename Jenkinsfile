@@ -4,12 +4,12 @@ pipeline {
     agent any 
     // tools {"org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform-0.12.17"}
 
-    environment {
-        // TF_HOME = tool('terraform-0.12.17')
-        // TF_IN_AUTOMATION = "true"
-        // PATH = "$TF_HOME:$PATH"
+    // environment {
+    //     // TF_HOME = tool('terraform-0.12.17')
+    //     // TF_IN_AUTOMATION = "true"
+    //     // PATH = "$TF_HOME:$PATH"
 
-    }
+    // }
 
     stages {
         stage('checkout') {
