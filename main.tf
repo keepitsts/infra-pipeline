@@ -11,7 +11,8 @@ terraform {
 }
 module "security_group" {
   source = "./modules/security_group"
-  
+  access_key = var.access_key
+  secret_key = var.secret_key
   profile = "sts-dm"
 
   sg_name = "dev_security_group"
@@ -25,7 +26,8 @@ module "security_group" {
 
 module "ec2_server" {
     source = "./modules/ec2"
-
+    access_key = var.access_key
+    secret_key = var.secret_key
     profile = "sts-dm"
     instance_type = "t3.medium"
     role = "s3_access_for_ec2"
