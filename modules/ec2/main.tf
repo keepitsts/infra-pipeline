@@ -69,5 +69,6 @@ resource "aws_instance" "server" {
   }
   tags = {
     Name = var.name
+    Poc = "wesley.coffay@keepitsts.com"
   }
 }
