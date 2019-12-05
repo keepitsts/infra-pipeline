@@ -34,7 +34,7 @@ node {
     stage('terraform plan'){
         dir('.'){
             sh "echo 'Planning Terraform Build'"
-            sh "./terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY'"
+            sh "./terraform plan -var 'access_key=${ACCESS_KEY}' -var 'secret_key=${SECRET_KEY}'"
         }
     }
 
